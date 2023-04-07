@@ -29,13 +29,13 @@ public class ThesisController {
         return thesisService.createThesis(thesis);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{title}")
     public Thesis updateThesis(@RequestBody Thesis updatedThesis) {
         return thesisService.updateThesis(updatedThesis);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteThesis(@PathVariable String id) {
-        thesisService.deleteThesis(id);
+    @DeleteMapping("/{title}")
+    public void deleteThesis(@PathVariable String title) {
+        thesisService.deleteThesisByTitle(title);
     }
 }

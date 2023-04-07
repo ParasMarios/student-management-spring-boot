@@ -11,4 +11,6 @@ public interface StudentRepository extends MongoRepository<Student, String> {
 
     Optional<Student> findByEmail(String email);
 
+    void deleteByEmail(String email);
+
 }

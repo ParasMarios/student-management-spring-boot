@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ThesisRepository extends MongoRepository<Thesis, String> {
 
     Optional<Thesis> findByTitle(String title);
+
+    void deleteByTitle(String title);
 }

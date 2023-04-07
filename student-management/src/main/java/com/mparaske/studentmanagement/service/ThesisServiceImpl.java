@@ -34,7 +34,7 @@ public class ThesisServiceImpl implements ThesisService {
     }
 
     @Override
-    public void deleteThesis(String id) {
-        thesisRepository.deleteById(id);
+    public void deleteThesisByTitle(String title) {
+        thesisRepository.deleteByTitle(title);
     }
 }

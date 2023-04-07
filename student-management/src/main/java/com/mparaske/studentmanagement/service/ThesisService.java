@@ -16,5 +16,5 @@ public interface ThesisService {
 
     Thesis updateThesis(Thesis thesis);
 
-    void deleteThesis(String id);
+    void deleteThesisByTitle(String title);
 }
