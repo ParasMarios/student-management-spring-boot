@@ -10,8 +10,13 @@ import java.util.List;
 @Component
 public class ThesisServiceImpl implements ThesisService {
 
+
+    private final ThesisRepository thesisRepository;
+
     @Autowired
-    private ThesisRepository thesisRepository;
+    public ThesisServiceImpl(ThesisRepository thesisRepository) {
+        this.thesisRepository = thesisRepository;
+    }
 
     @Override
     public List<Thesis> getAllTheses() {

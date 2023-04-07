@@ -10,8 +10,13 @@ import java.util.List;
 @Component
 public class StudentServiceImpl implements StudentService {
 
+
+    private final StudentRepository studentRepository;
+
     @Autowired
-    private StudentRepository studentRepository;
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public List<Student> getAllStudents() {

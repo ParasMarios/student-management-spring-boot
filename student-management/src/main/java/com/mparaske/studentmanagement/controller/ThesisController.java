@@ -11,8 +11,13 @@ import java.util.List;
 @RequestMapping("/api/v1/theses")
 public class ThesisController {
 
+
+    private final ThesisServiceImpl thesisService;
+
     @Autowired
-    private ThesisServiceImpl thesisService;
+    public ThesisController(ThesisServiceImpl thesisService) {
+        this.thesisService = thesisService;
+    }
 
     @GetMapping
     public List<Thesis> getAllThesis() {
