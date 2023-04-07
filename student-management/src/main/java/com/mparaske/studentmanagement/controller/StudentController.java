@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/students")
@@ -23,22 +24,35 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<List<Student>> getAllStudents() {
-        return new ResponseEntity<List<Student>>(studentService.getAllStudents(), HttpStatus.OK);
+        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
     @GetMapping("/{email}")
-    public Student getStudentById(@PathVariable String email) {
-        return studentService.getStudentByEmail(email);
+    public ResponseEntity<Optional<Student>> getStudentByEmail(@PathVariable String email) {
+        if (email == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
+        }
     }
 
     @PostMapping
-    public Student createStudent(@RequestBody Student student) {
-        return studentService.createStudent(student);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{email}")
-    public Student updateStudent(@RequestBody Student updatedStudent) {
-        return studentService.updateStudent(updatedStudent);
+    @PatchMapping("/{email}/updateThesisTitle")
+    public ResponseEntity<String> updateThesisTitle(@PathVariable("email") String email, @RequestBody String thesisTitle) {
+        try {
+            boolean isUpdated = studentService.updateThesisTitle(email, thesisTitle);
+            if (isUpdated) {
+                return new ResponseEntity<>("Thesis title has been updated successfully for student with email: " + email, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Student not found with email: " + email, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while updating the thesis title: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{email}")
