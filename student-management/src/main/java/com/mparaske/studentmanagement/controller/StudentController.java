@@ -29,11 +29,7 @@ public class StudentController {
 
     @GetMapping("/{email}")
     public ResponseEntity<Optional<Student>> getStudentByEmail(@PathVariable String email) {
-        if (email == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
-        }
+        return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
     }
 
     @PostMapping
@@ -56,7 +52,12 @@ public class StudentController {
     }
 
     @DeleteMapping("/{email}")
-    public void deleteStudent(@PathVariable String email) {
-        studentService.deleteStudentByEmail(email);
+    public ResponseEntity<String> deleteStudentByEmail(@PathVariable String email) {
+        try {
+            studentService.deleteStudentByEmail(email);
+            return new ResponseEntity<>("Student with email: " + email + " has been deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while deleting the student: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
