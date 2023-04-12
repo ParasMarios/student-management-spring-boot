@@ -13,7 +13,7 @@ public class Thesis {
     private ObjectId id;
     private String title;
     private String description;
-    private int maxNumberOfStudents;
+    private Integer maxNumberOfStudents;
     private String necessaryKnowledge;
     private String deliverables;
     private String bibliographicReferences;
