@@ -15,7 +15,7 @@ public interface StudentService {
 
     Student createStudent(Student student);
 
-    boolean updateThesisTitle(String email, String thesisTitle);
+    boolean updateStudent(String email, Student student);
 
     void deleteStudentByEmail(String email);
 }

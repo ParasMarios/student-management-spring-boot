@@ -43,16 +43,23 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean updateThesisTitle(String email, String thesisTitle) {
+    public boolean updateStudent(String email, Student student) {
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(email));
 
         Update update = new Update();
-        update.set("thesisTitle", thesisTitle);
+        if (student.getThesisTitle() != null) {
+            update.set("thesisTitle", student.getThesisTitle());
+        }
+        if (student.getComments() != null) {
+            update.set("comments", student.getComments());
+        }
 
-        UpdateResult result = mongoTemplate.updateFirst(query, update, Student.class);
-
-        return result.getModifiedCount() > 0;
+        if (update.getUpdateObject().keySet().size() > 0) {
+            UpdateResult result = mongoTemplate.updateFirst(query, update, Student.class);
+            return result.getModifiedCount() > 0;
+        }
+        return false;
     }
 
     @Override

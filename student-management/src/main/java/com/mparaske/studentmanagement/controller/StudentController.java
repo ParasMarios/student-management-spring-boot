@@ -37,17 +37,17 @@ public class StudentController {
         return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{email}/updateThesisTitle")
-    public ResponseEntity<String> updateThesisTitle(@PathVariable("email") String email, @RequestBody String thesisTitle) {
+    @PatchMapping("/{email}")
+    public ResponseEntity<String> updateStudent(@PathVariable("email") String email, @RequestBody Student student) {
         try {
-            boolean isUpdated = studentService.updateThesisTitle(email, thesisTitle);
+            boolean isUpdated = studentService.updateStudent(email, student);
             if (isUpdated) {
-                return new ResponseEntity<>("Thesis title has been updated successfully for student with email: " + email, HttpStatus.OK);
+                return new ResponseEntity<>("Student has been updated successfully for student with email: " + email, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Student not found with email: " + email, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while updating the thesis title: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred while updating the student: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
