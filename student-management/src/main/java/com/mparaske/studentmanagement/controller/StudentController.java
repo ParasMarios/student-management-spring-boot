@@ -34,7 +34,11 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PatchMapping("/{email}")

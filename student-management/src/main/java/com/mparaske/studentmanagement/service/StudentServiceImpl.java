@@ -10,6 +10,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +42,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student createStudent(Student student) {
-        return studentRepository.save(student);
+        if (isValidEmail(student.getEmail())) {
+            return studentRepository.save(student);
+        } else {
+            throw new IllegalArgumentException("Invalid email");
+        }
     }
 
     @Override
@@ -65,5 +72,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudentByEmail(String email) {
         studentRepository.deleteByEmail(email);
+    }
+
+    @Override
+    public boolean isValidEmail(String email) {
+        try {
+            InternetAddress emailAddress = new InternetAddress(email);
+            emailAddress.validate();
+            return email.endsWith("@uop.gr");
+        } catch (AddressException ex) {
+            return false;
+        }
     }
 }

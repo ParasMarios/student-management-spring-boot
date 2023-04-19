@@ -18,4 +18,6 @@ public interface StudentService {
     boolean updateStudent(String email, Student student);
 
     void deleteStudentByEmail(String email);
+
+    boolean isValidEmail(String email);
 }
