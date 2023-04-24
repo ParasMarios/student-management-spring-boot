@@ -17,4 +17,6 @@ public interface ThesisService {
     boolean updateThesisByTitle(String title, Thesis thesis);
 
     void deleteThesisByTitle(String title);
+
+    void deleteAllTheses();
 }

@@ -83,4 +83,9 @@ public class ThesisServiceImpl implements ThesisService {
     public void deleteThesisByTitle(String title) {
         thesisRepository.deleteByTitle(title);
     }
+
+    @Override
+    public void deleteAllTheses() {
+        thesisRepository.deleteAll();
+    }
 }

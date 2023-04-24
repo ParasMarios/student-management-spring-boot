@@ -75,6 +75,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public void deleteAllStudents() {
+        studentRepository.deleteAll();
+    }
+
+    @Override
     public boolean isValidEmail(String email) {
         try {
             InternetAddress emailAddress = new InternetAddress(email);
