@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Thesis {
 
     @Id
-    private ObjectId id;
+    private String id;
     private String title;
     private String description;
     private Integer maxNumberOfStudents;
