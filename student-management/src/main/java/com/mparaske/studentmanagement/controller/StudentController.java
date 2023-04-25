@@ -2,6 +2,7 @@ package com.mparaske.studentmanagement.controller;
 
 import com.mparaske.studentmanagement.model.Student;
 import com.mparaske.studentmanagement.service.StudentServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
         try {
             return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -50,7 +51,7 @@ public class StudentController {
     }
 
     @PatchMapping("/students/{email}")
-    public ResponseEntity<String> updateStudent(@PathVariable("email") String email, @RequestBody Student student) {
+    public ResponseEntity<String> updateStudent(@Valid @PathVariable("email") String email, @RequestBody Student student) {
         try {
             boolean isUpdated = studentService.updateStudent(email, student);
             if (isUpdated) {
