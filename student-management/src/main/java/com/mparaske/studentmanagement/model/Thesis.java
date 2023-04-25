@@ -24,9 +24,8 @@ public class Thesis {
     @Size(max = 500, message = "Description must be at most 500 characters")
     private String description;
 
-    @NotBlank(message = "Max number of students cannot be empty")
-    @Min(value = 1, message = "Max number of students must be between 1 and 2")
-    @Max(value = 2, message = "Max number of students must be between 1 and 2")
+    @Min(value = 1, message = "Max number of students must be between 1 or 2")
+    @Max(value = 2, message = "Max number of students must be between 1 or 2")
     private Integer maxNumberOfStudents;
 
     @Size(max = 100, message = "Necessary knowledge must be at most 100 characters")

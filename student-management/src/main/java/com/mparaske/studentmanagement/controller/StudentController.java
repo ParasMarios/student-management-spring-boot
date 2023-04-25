@@ -7,10 +7,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -43,16 +46,23 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
+    public ResponseEntity<String> createStudent(@Valid @RequestBody Student student, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
+        }
         try {
-            return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
+            studentService.createStudent(student);
+            return new ResponseEntity<>("Student has been created successfully", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred while creating the student: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PatchMapping("/students/{email}")
-    public ResponseEntity<String> updateStudent(@Valid @PathVariable("email") String email,@Valid @RequestBody StudentUpdateRequest studentUpdateRequest) {
+    public ResponseEntity<String> updateStudent(@Valid @PathVariable("email") String email, @Valid @RequestBody StudentUpdateRequest studentUpdateRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
+        }
         try {
             boolean isUpdated = studentService.updateStudent(email, studentUpdateRequest);
             if (isUpdated) {

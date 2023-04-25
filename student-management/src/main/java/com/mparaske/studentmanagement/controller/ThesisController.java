@@ -7,9 +7,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -42,16 +45,23 @@ public class ThesisController {
     }
 
     @PostMapping("/theses")
-    public ResponseEntity<Thesis> createThesis(@Valid @RequestBody Thesis thesis) {
+    public ResponseEntity<String> createThesis(@Valid @RequestBody Thesis thesis, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
+        }
         try {
-            return new ResponseEntity<>(thesisService.createThesis(thesis), HttpStatus.CREATED);
+            thesisService.createThesis(thesis);
+            return new ResponseEntity<>("Thesis has been created successfully", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred while creating the thesis: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PatchMapping("/theses/{title}")
-    public ResponseEntity<String> updateThesisByTitle(@Valid @PathVariable("title") String title, @Valid @RequestBody ThesisUpdateRequest thesisUpdateRequest) {
+    public ResponseEntity<String> updateThesisByTitle(@Valid @PathVariable("title") String title, @Valid @RequestBody ThesisUpdateRequest thesisUpdateRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
+        }
         try {
             boolean isUpdated = thesisService.updateThesisByTitle(title, thesisUpdateRequest);
             if (isUpdated) {
