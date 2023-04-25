@@ -1,6 +1,7 @@
 package com.mparaske.studentmanagement.controller;
 
 import com.mparaske.studentmanagement.model.Student;
+import com.mparaske.studentmanagement.model.StudentUpdateRequest;
 import com.mparaske.studentmanagement.service.StudentServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,9 @@ public class StudentController {
     }
 
     @PatchMapping("/students/{email}")
-    public ResponseEntity<String> updateStudent(@Valid @PathVariable("email") String email, @RequestBody Student student) {
+    public ResponseEntity<String> updateStudent(@Valid @PathVariable("email") String email,@Valid @RequestBody StudentUpdateRequest studentUpdateRequest) {
         try {
-            boolean isUpdated = studentService.updateStudent(email, student);
+            boolean isUpdated = studentService.updateStudent(email, studentUpdateRequest);
             if (isUpdated) {
                 return new ResponseEntity<>("Student has been updated successfully for student with email: " + email, HttpStatus.OK);
             } else {
@@ -74,7 +75,7 @@ public class StudentController {
         }
     }
 
-    @DeleteMapping("students")
+    @DeleteMapping("/students")
     public ResponseEntity<String> deleteAllStudents() {
         try {
             studentService.deleteAllStudents();

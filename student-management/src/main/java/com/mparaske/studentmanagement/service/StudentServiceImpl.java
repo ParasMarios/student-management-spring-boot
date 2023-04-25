@@ -2,6 +2,7 @@ package com.mparaske.studentmanagement.service;
 
 import com.mongodb.client.result.UpdateResult;
 import com.mparaske.studentmanagement.model.Student;
+import com.mparaske.studentmanagement.model.StudentUpdateRequest;
 import com.mparaske.studentmanagement.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -50,16 +51,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean updateStudent(String email, Student student) {
+    public boolean updateStudent(String email, StudentUpdateRequest studentUpdateRequest) {
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(email));
 
         Update update = new Update();
-        if (student.getThesisTitle() != null) {
-            update.set("thesisTitle", student.getThesisTitle());
+        if (studentUpdateRequest.getThesisTitle() != null) {
+            update.set("thesisTitle", studentUpdateRequest.getThesisTitle());
         }
-        if (student.getComments() != null) {
-            update.set("comments", student.getComments());
+        if (studentUpdateRequest.getComments() != null) {
+            update.set("comments", studentUpdateRequest.getComments());
         }
 
         if (update.getUpdateObject().keySet().size() > 0) {

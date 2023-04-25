@@ -1,6 +1,7 @@
 package com.mparaske.studentmanagement.service;
 
 import com.mparaske.studentmanagement.model.Student;
+import com.mparaske.studentmanagement.model.StudentUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface StudentService {
 
     Student createStudent(Student student);
 
-    boolean updateStudent(String email, Student student);
+    boolean updateStudent(String email, StudentUpdateRequest studentUpdateRequest);
 
     void deleteStudentByEmail(String email);
 
