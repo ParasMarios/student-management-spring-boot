@@ -1,7 +1,9 @@
 package com.mparaske.studentmanagement.controller;
 
 import com.mparaske.studentmanagement.model.Thesis;
+import com.mparaske.studentmanagement.model.ThesisUpdateRequest;
 import com.mparaske.studentmanagement.service.ThesisServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,14 +42,18 @@ public class ThesisController {
     }
 
     @PostMapping("/theses")
-    public ResponseEntity<Thesis> createThesis(@RequestBody Thesis thesis) {
-        return new ResponseEntity<>(thesisService.createThesis(thesis), HttpStatus.CREATED);
+    public ResponseEntity<Thesis> createThesis(@Valid @RequestBody Thesis thesis) {
+        try {
+            return new ResponseEntity<>(thesisService.createThesis(thesis), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PatchMapping("/theses/{title}")
-    public ResponseEntity<String> updateThesisByTitle(@PathVariable("title") String title, @RequestBody Thesis updatedThesis) {
+    public ResponseEntity<String> updateThesisByTitle(@Valid @PathVariable("title") String title, @Valid @RequestBody ThesisUpdateRequest thesisUpdateRequest) {
         try {
-            boolean isUpdated = thesisService.updateThesisByTitle(title, updatedThesis);
+            boolean isUpdated = thesisService.updateThesisByTitle(title, thesisUpdateRequest);
             if (isUpdated) {
                 return new ResponseEntity<>("Thesis has been updated successfully for thesis with title: " + title, HttpStatus.OK);
             } else {

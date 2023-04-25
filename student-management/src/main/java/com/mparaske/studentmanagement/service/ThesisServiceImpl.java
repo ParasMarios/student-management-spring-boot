@@ -2,6 +2,7 @@ package com.mparaske.studentmanagement.service;
 
 import com.mongodb.client.result.UpdateResult;
 import com.mparaske.studentmanagement.model.Thesis;
+import com.mparaske.studentmanagement.model.ThesisUpdateRequest;
 import com.mparaske.studentmanagement.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -42,41 +43,44 @@ public class ThesisServiceImpl implements ThesisService {
     }
 
     @Override
-    public boolean updateThesisByTitle(String title, Thesis thesis) {
+    public boolean updateThesisByTitle(String title, ThesisUpdateRequest thesisUpdateRequest) {
         Query query = new Query();
         query.addCriteria(Criteria.where("title").is(title));
         Update update = new Update();
-        if (thesis.getTitle() != null) {
-            update.set("title", thesis.getTitle());
+        if (thesisUpdateRequest.getTitle() != null) {
+            update.set("title", thesisUpdateRequest.getTitle());
         }
 
-        if (thesis.getDescription() != null) {
-            update.set("description", thesis.getDescription());
+        if (thesisUpdateRequest.getDescription() != null) {
+            update.set("description", thesisUpdateRequest.getDescription());
         }
 
-        if (thesis.getMaxNumberOfStudents() != null) {
-            update.set("maxNumberOfStudents", thesis.getMaxNumberOfStudents());
+        if (thesisUpdateRequest.getMaxNumberOfStudents() != null) {
+            update.set("maxNumberOfStudents", thesisUpdateRequest.getMaxNumberOfStudents());
         }
 
-        if (thesis.getNecessaryKnowledge() != null) {
-            update.set("necessaryKnowledge", thesis.getNecessaryKnowledge());
+        if (thesisUpdateRequest.getNecessaryKnowledge() != null) {
+            update.set("necessaryKnowledge", thesisUpdateRequest.getNecessaryKnowledge());
         }
 
-        if (thesis.getDeliverables() != null) {
-            update.set("deliverables", thesis.getDeliverables());
+        if (thesisUpdateRequest.getDeliverables() != null) {
+            update.set("deliverables", thesisUpdateRequest.getDeliverables());
         }
 
-        if (thesis.getBibliographicReferences() != null) {
-            update.set("bibliographicReferences", thesis.getBibliographicReferences());
+        if (thesisUpdateRequest.getBibliographicReferences() != null) {
+            update.set("bibliographicReferences", thesisUpdateRequest.getBibliographicReferences());
         }
 
-        if (thesis.getStatus() != null) {
-            update.set("status", thesis.getStatus());
+        if (thesisUpdateRequest.getStatus() != null) {
+            update.set("status", thesisUpdateRequest.getStatus());
         }
 
-        UpdateResult result = mongoTemplate.updateFirst(query, update, Thesis.class);
-
-        return result.getModifiedCount() > 0;
+        if (update.getUpdateObject().keySet().size() > 0) {
+            UpdateResult result = mongoTemplate.updateFirst(query, update, Thesis.class);
+            return result.getModifiedCount() > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override

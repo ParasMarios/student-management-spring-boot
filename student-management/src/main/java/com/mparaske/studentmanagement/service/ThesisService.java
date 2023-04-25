@@ -1,6 +1,7 @@
 package com.mparaske.studentmanagement.service;
 
 import com.mparaske.studentmanagement.model.Thesis;
+import com.mparaske.studentmanagement.model.ThesisUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ThesisService {
 
     Thesis createThesis(Thesis thesis);
 
-    boolean updateThesisByTitle(String title, Thesis thesis);
+    boolean updateThesisByTitle(String title, ThesisUpdateRequest thesisUpdateRequest);
 
     void deleteThesisByTitle(String title);
 
