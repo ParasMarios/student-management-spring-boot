@@ -23,4 +23,6 @@ public interface StudentService {
     void deleteAllStudents();
 
     boolean isValidEmail(String email);
+
+    boolean existsByEmail(String email);
 }

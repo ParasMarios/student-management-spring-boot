@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class StudentController {
 
 
@@ -43,6 +44,12 @@ public class StudentController {
     @GetMapping("/students/{email}")
     public ResponseEntity<Optional<Student>> getStudentByEmail(@PathVariable String email) {
         return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
+    }
+
+    @GetMapping("/students/checkEmail/{email}")
+    public ResponseEntity<Boolean> checkEmailExists(@PathVariable String email) {
+        boolean exists = studentService.existsByEmail(email);
+        return ResponseEntity.ok(exists);
     }
 
     @PostMapping("/students")
