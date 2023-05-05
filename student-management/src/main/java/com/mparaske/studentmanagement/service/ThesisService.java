@@ -20,4 +20,6 @@ public interface ThesisService {
     void deleteThesisByTitle(String title);
 
     void deleteAllTheses();
+
+    List<Thesis> getThesesByStatusContains(String status);
 }

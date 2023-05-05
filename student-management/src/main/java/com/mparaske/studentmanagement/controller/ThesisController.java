@@ -45,6 +45,11 @@ public class ThesisController {
         return new ResponseEntity<>(thesisService.getThesisByTitle(title), HttpStatus.OK);
     }
 
+    @GetMapping("/theses/status/contains/{status}")
+    public ResponseEntity<List<Thesis>> getThesesByStatusContains(@PathVariable String status) {
+        return new ResponseEntity<>(thesisService.getThesesByStatusContains(status), HttpStatus.OK);
+    }
+
     @PostMapping("/theses")
     public ResponseEntity<String> createThesis(@Valid @RequestBody Thesis thesis, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

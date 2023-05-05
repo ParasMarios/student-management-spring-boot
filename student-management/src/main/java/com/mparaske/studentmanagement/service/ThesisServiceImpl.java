@@ -92,4 +92,11 @@ public class ThesisServiceImpl implements ThesisService {
     public void deleteAllTheses() {
         thesisRepository.deleteAll();
     }
+
+    @Override
+    public List<Thesis> getThesesByStatusContains(String status) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("status").regex(status, "i"));
+        return mongoTemplate.find(query, Thesis.class);
+    }
 }
