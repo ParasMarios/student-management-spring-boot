@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document(collection = "theses")
@@ -40,4 +42,7 @@ public class Thesis {
     @NotBlank(message = "Status cannot be empty")
     @Size(max = 50, message = "Status must be at most 50 characters")
     private String status;
+
+    @Size(max = 2, message = "Max number of assigned students must be between 1 or 2")
+    private List<String> assignedStudents = new ArrayList<>();
 }

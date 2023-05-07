@@ -3,6 +3,7 @@ package com.mparaske.studentmanagement.service;
 import com.mongodb.client.result.UpdateResult;
 import com.mparaske.studentmanagement.model.Student;
 import com.mparaske.studentmanagement.model.StudentUpdateRequest;
+import com.mparaske.studentmanagement.model.Thesis;
 import com.mparaske.studentmanagement.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +44,18 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student createStudent(Student student) {
         if (isValidEmail(student.getEmail())) {
+            Thesis existingThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(student.getThesisTitle())), Thesis.class, "theses");
+            if (existingThesis != null) {
+                if (existingThesis.getAssignedStudents().size() < existingThesis.getMaxNumberOfStudents()) {
+                    existingThesis.getAssignedStudents().add(student.getEmail());
+                    existingThesis.setStatus("Assigned");
+                    mongoTemplate.save(existingThesis);
+                } else {
+                    throw new IllegalArgumentException("The thesis is already assigned to the maximum number of students.");
+                }
+            } else {
+                throw new IllegalArgumentException("The thesis with the given title does not exist.");
+            }
             return studentRepository.save(student);
         } else {
             throw new IllegalArgumentException("Invalid email");
@@ -71,8 +83,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudentByEmail(String email) {
-        studentRepository.deleteByEmail(email);
+    public void deleteStudentByEmail(String email, boolean reassignThesis) {
+        Optional<Student> studentOptional = studentRepository.findByEmail(email);
+        if (studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            Thesis existingThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(student.getThesisTitle())), Thesis.class, "theses");
+            if (existingThesis != null) {
+                existingThesis.getAssignedStudents().remove(student.getEmail());
+                if (reassignThesis && existingThesis.getAssignedStudents().isEmpty()) {
+                    existingThesis.setStatus("available");
+                }
+                mongoTemplate.save(existingThesis);
+            }
+            studentRepository.deleteByEmail(email);
+        } else {
+            throw new IllegalArgumentException("Student not found with the provided email");
+        }
     }
 
     @Override
