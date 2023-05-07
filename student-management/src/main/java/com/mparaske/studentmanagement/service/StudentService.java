@@ -18,7 +18,7 @@ public interface StudentService {
 
     boolean updateStudent(String email, StudentUpdateRequest studentUpdateRequest);
 
-    void deleteStudentByEmail(String email);
+    void deleteStudentByEmail(String email, boolean reassignThesis);
 
     void deleteAllStudents();
 

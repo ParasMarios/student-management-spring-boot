@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:3000")
 public class StudentController {
 
-
     private final StudentServiceImpl studentService;
 
     @Autowired
@@ -83,9 +82,9 @@ public class StudentController {
     }
 
     @DeleteMapping("students/{email}")
-    public ResponseEntity<String> deleteStudentByEmail(@PathVariable("email") String email) {
+    public ResponseEntity<String> deleteStudentByEmail(@PathVariable("email") String email, @RequestParam("reassignThesis") boolean reassignThesis) {
         try {
-            studentService.deleteStudentByEmail(email);
+            studentService.deleteStudentByEmail(email, reassignThesis);
             return new ResponseEntity<>("Student with email: " + email + " has been deleted successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while deleting the student: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
