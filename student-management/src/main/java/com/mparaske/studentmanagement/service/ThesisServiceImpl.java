@@ -75,6 +75,11 @@ public class ThesisServiceImpl implements ThesisService {
             update.set("status", thesisUpdateRequest.getStatus());
         }
 
+        if (thesisUpdateRequest.getMilestones() != null) {
+            update.set("milestones", thesisUpdateRequest.getMilestones());
+        }
+
+
         if (update.getUpdateObject().keySet().size() > 0) {
             UpdateResult result = mongoTemplate.updateFirst(query, update, Thesis.class);
             return result.getModifiedCount() > 0;
