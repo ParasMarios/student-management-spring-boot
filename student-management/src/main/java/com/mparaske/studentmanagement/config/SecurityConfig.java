@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/api/v1/theses")
                 .permitAll()
-                .requestMatchers("/api/v1/theses/status/contains/{status}")
+                .requestMatchers("/api/v1/theses/search/{keyword}")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
