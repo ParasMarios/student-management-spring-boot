@@ -45,9 +45,9 @@ public class ThesisController {
         return new ResponseEntity<>(thesisService.getThesisByTitle(title), HttpStatus.OK);
     }
 
-    @GetMapping("/theses/status/contains/{status}")
-    public ResponseEntity<List<Thesis>> getThesesByStatusContains(@PathVariable String status) {
-        return new ResponseEntity<>(thesisService.getThesesByStatusContains(status), HttpStatus.OK);
+    @GetMapping("/theses/search/{keyword}")
+    public ResponseEntity<List<Thesis>> getThesesByTitleOrDescriptionContains(@PathVariable String keyword, @RequestParam(required = false) String status) {
+        return new ResponseEntity<>(thesisService.getThesesByTitleOrDescriptionContains(keyword, status), HttpStatus.OK);
     }
 
     @PostMapping("/theses")

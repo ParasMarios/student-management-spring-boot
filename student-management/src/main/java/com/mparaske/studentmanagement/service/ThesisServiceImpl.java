@@ -16,7 +16,6 @@ import java.util.List;
 @Component
 public class ThesisServiceImpl implements ThesisService {
 
-
     private final ThesisRepository thesisRepository;
 
     private final MongoTemplate mongoTemplate;
@@ -99,9 +98,16 @@ public class ThesisServiceImpl implements ThesisService {
     }
 
     @Override
-    public List<Thesis> getThesesByStatusContains(String status) {
+    public List<Thesis> getThesesByTitleOrDescriptionContains(String keyword, String status) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("status").regex(status, "i"));
+        Criteria criteria = new Criteria().orOperator(
+                Criteria.where("title").regex(keyword, "i"),
+                Criteria.where("description").regex(keyword, "i")
+        );
+        if (status != null && !status.isEmpty()) {
+            criteria = criteria.andOperator(Criteria.where("status").is(status));
+        }
+        query.addCriteria(criteria);
         return mongoTemplate.find(query, Thesis.class);
     }
 }

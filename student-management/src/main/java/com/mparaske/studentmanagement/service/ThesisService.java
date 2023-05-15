@@ -21,5 +21,5 @@ public interface ThesisService {
 
     void deleteAllTheses();
 
-    List<Thesis> getThesesByStatusContains(String status);
+    List<Thesis> getThesesByTitleOrDescriptionContains(String keyword, String status);
 }
