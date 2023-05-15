@@ -74,8 +74,20 @@ public class ThesisServiceImpl implements ThesisService {
             update.set("status", thesisUpdateRequest.getStatus());
         }
 
-        if (thesisUpdateRequest.getMilestones() != null) {
-            update.set("milestones", thesisUpdateRequest.getMilestones());
+        if (thesisUpdateRequest.getMilestoneName() != null) {
+            update.set("milestones", thesisUpdateRequest.getMilestoneName());
+        }
+
+        if (thesisUpdateRequest.getMilestoneDescription() != null) {
+            update.set("milestones", thesisUpdateRequest.getMilestoneDescription());
+        }
+
+        if (thesisUpdateRequest.getMilestoneDate() != null) {
+            update.set("milestones", thesisUpdateRequest.getMilestoneDate());
+        }
+
+        if (thesisUpdateRequest.getMilestoneCompletionPercentage() != null) {
+            update.set("milestones", thesisUpdateRequest.getMilestoneCompletionPercentage());
         }
 
 

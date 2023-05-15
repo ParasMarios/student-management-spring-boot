@@ -46,5 +46,13 @@ public class Thesis {
     @Size(max = 2, message = "Max number of assigned students must be between 1 or 2")
     private List<String> assignedStudents = new ArrayList<>();
 
-    private List<Milestone> milestones = new ArrayList<>();
+    @Size(max = 50, message = "Status must be at most 50 characters")
+    private String MilestoneName;
+
+    @Size(max = 50, message = "Status must be at most 50 characters")
+    private String MilestoneDescription;
+
+    private String MilestoneDate;
+
+    private String MilestoneCompletionPercentage;
 }
