@@ -90,16 +90,21 @@ public class StudentServiceImpl implements StudentService {
             Thesis existingThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(student.getThesisTitle())), Thesis.class, "theses");
             if (existingThesis != null) {
                 existingThesis.getAssignedStudents().remove(student.getEmail());
-                if (reassignThesis && existingThesis.getAssignedStudents().isEmpty()) {
-                    existingThesis.setStatus("available");
+                if (existingThesis.getAssignedStudents().isEmpty()) {
+                    if (reassignThesis) {
+                        existingThesis.setStatus("available");
+                        mongoTemplate.save(existingThesis);
+                    } else {
+                        mongoTemplate.remove(existingThesis);
+                    }
                 }
-                mongoTemplate.save(existingThesis);
             }
             studentRepository.deleteByEmail(email);
         } else {
             throw new IllegalArgumentException("Student not found with the provided email");
         }
     }
+
 
     @Override
     public void deleteAllStudents() {

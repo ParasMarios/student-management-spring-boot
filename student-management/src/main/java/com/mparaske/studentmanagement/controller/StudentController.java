@@ -81,7 +81,7 @@ public class StudentController {
         }
     }
 
-    @DeleteMapping("students/{email}")
+    @DeleteMapping("/students/{email}")
     public ResponseEntity<String> deleteStudentByEmail(@PathVariable("email") String email, @RequestParam("reassignThesis") boolean reassignThesis) {
         try {
             studentService.deleteStudentByEmail(email, reassignThesis);
