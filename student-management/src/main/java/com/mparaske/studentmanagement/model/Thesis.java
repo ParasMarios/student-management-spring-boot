@@ -47,12 +47,12 @@ public class Thesis {
     private List<String> assignedStudents = new ArrayList<>();
 
     @Size(max = 50, message = "Status must be at most 50 characters")
-    private String MilestoneName;
+    private String milestoneName;
 
     @Size(max = 50, message = "Status must be at most 50 characters")
-    private String MilestoneDescription;
+    private String milestoneDescription;
 
-    private String MilestoneDate;
+    private String milestoneDate;
 
-    private String MilestoneCompletionPercentage;
+    private String milestoneCompletionPercentage;
 }

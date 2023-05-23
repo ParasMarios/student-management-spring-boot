@@ -75,20 +75,21 @@ public class ThesisServiceImpl implements ThesisService {
         }
 
         if (thesisUpdateRequest.getMilestoneName() != null) {
-            update.set("milestones", thesisUpdateRequest.getMilestoneName());
+            update.set("milestoneName", thesisUpdateRequest.getMilestoneName());
         }
 
         if (thesisUpdateRequest.getMilestoneDescription() != null) {
-            update.set("milestones", thesisUpdateRequest.getMilestoneDescription());
+            update.set("milestoneDescription", thesisUpdateRequest.getMilestoneDescription());
         }
 
         if (thesisUpdateRequest.getMilestoneDate() != null) {
-            update.set("milestones", thesisUpdateRequest.getMilestoneDate());
+            update.set("milestoneDate", thesisUpdateRequest.getMilestoneDate());
         }
 
         if (thesisUpdateRequest.getMilestoneCompletionPercentage() != null) {
-            update.set("milestones", thesisUpdateRequest.getMilestoneCompletionPercentage());
+            update.set("milestoneCompletionPercentage", thesisUpdateRequest.getMilestoneCompletionPercentage());
         }
+
 
 
         if (update.getUpdateObject().keySet().size() > 0) {
