@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -46,13 +47,5 @@ public class Thesis {
     @Size(max = 2, message = "Max number of assigned students must be between 1 or 2")
     private List<String> assignedStudents = new ArrayList<>();
 
-    @Size(max = 50, message = "Status must be at most 50 characters")
-    private String milestoneName;
-
-    @Size(max = 50, message = "Status must be at most 50 characters")
-    private String milestoneDescription;
-
-    private String milestoneDate;
-
-    private String milestoneCompletionPercentage;
+    private List<Milestone> milestones = new ArrayList<>();
 }

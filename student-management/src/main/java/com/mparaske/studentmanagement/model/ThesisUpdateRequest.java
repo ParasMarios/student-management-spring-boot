@@ -5,6 +5,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class ThesisUpdateRequest {
 
@@ -30,13 +33,5 @@ public class ThesisUpdateRequest {
     @Size(max = 50, message = "Status must be at most 50 characters")
     private String status;
 
-    @Size(max = 50, message = "Status must be at most 50 characters")
-    private String MilestoneName;
-
-    @Size(max = 50, message = "Status must be at most 50 characters")
-    private String MilestoneDescription;
-
-    private String MilestoneDate;
-
-    private String MilestoneCompletionPercentage;
+    private List<Milestone> milestones = new ArrayList<>();
 }

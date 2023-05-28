@@ -1,5 +1,7 @@
 package com.mparaske.studentmanagement.service;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.result.UpdateResult;
 import com.mparaske.studentmanagement.model.Thesis;
 import com.mparaske.studentmanagement.model.ThesisUpdateRequest;
@@ -12,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ThesisServiceImpl implements ThesisService {
@@ -73,21 +76,21 @@ public class ThesisServiceImpl implements ThesisService {
         if (thesisUpdateRequest.getStatus() != null) {
             update.set("status", thesisUpdateRequest.getStatus());
         }
+        if (thesisUpdateRequest.getMilestones() != null) {
+            List<DBObject> dbMilestones = thesisUpdateRequest.getMilestones().stream()
+                    .map(milestone -> {
+                        DBObject dbObject = new BasicDBObject();
+                        dbObject.put("name", milestone.getName());
+                        dbObject.put("description", milestone.getDescription());
+                        dbObject.put("date", milestone.getDate());
+                        dbObject.put("completionPercentage", milestone.getCompletionPercentage());
+                        return dbObject;
+                    })
+                    .toList();
 
-        if (thesisUpdateRequest.getMilestoneName() != null) {
-            update.set("milestoneName", thesisUpdateRequest.getMilestoneName());
-        }
-
-        if (thesisUpdateRequest.getMilestoneDescription() != null) {
-            update.set("milestoneDescription", thesisUpdateRequest.getMilestoneDescription());
-        }
-
-        if (thesisUpdateRequest.getMilestoneDate() != null) {
-            update.set("milestoneDate", thesisUpdateRequest.getMilestoneDate());
-        }
-
-        if (thesisUpdateRequest.getMilestoneCompletionPercentage() != null) {
-            update.set("milestoneCompletionPercentage", thesisUpdateRequest.getMilestoneCompletionPercentage());
+            for (DBObject dbMilestone : dbMilestones) {
+                update.push("milestones", dbMilestone);
+            }
         }
 
 
