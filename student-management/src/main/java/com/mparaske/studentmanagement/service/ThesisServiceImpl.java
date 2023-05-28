@@ -91,7 +91,6 @@ public class ThesisServiceImpl implements ThesisService {
         }
 
 
-
         if (update.getUpdateObject().keySet().size() > 0) {
             UpdateResult result = mongoTemplate.updateFirst(query, update, Thesis.class);
             return result.getModifiedCount() > 0;
@@ -118,7 +117,7 @@ public class ThesisServiceImpl implements ThesisService {
                 Criteria.where("description").regex(keyword, "i")
         );
         if (status != null && !status.isEmpty()) {
-            criteria = criteria.andOperator(Criteria.where("status").is(status));
+            criteria.and("status").is(status);
         }
         query.addCriteria(criteria);
         return mongoTemplate.find(query, Thesis.class);
