@@ -94,6 +94,7 @@ public class StudentServiceImpl implements StudentService {
                     if (existingThesis.getAssignedStudents().isEmpty()) {
                         if (reassignThesis) {
                             existingThesis.setStatus("available");
+                            existingThesis.getMilestones().clear();
                         } else {
                             mongoTemplate.remove(existingThesis);
                             studentRepository.deleteByEmail(email);
@@ -108,6 +109,7 @@ public class StudentServiceImpl implements StudentService {
             throw new IllegalArgumentException("Student not found with the provided email");
         }
     }
+
 
 
 
