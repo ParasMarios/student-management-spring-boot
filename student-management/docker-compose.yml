@@ -1,0 +1,17 @@
+version: '3'
+services:
+
+  student-management-back-end:
+    image: "student-management-back:0.0.1"
+    container_name: student-management-back-end
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING.PROFILES.ACTIVE=default
+  student-management-front-end:
+    image: "student-management-front:0.0.1"
+    container_name: student-management-front-end
+    ports:
+      - "3000:3000"
+    links:
+      - student-management-back-end
