@@ -66,11 +66,46 @@ public class StudentServiceImpl implements StudentService {
     public boolean updateStudent(String email, StudentUpdateRequest studentUpdateRequest) {
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(email));
+        Student existingStudent = mongoTemplate.findOne(query, Student.class);
+
+        // Add a null check for existingStudent
+        if (existingStudent == null) {
+            throw new IllegalArgumentException("The student with the given email does not exist.");
+        }
 
         Update update = new Update();
-        if (studentUpdateRequest.getThesisTitle() != null) {
-            update.set("thesisTitle", studentUpdateRequest.getThesisTitle());
+
+        if (studentUpdateRequest.getThesisTitle() != null && !studentUpdateRequest.getThesisTitle().equals(existingStudent.getThesisTitle())) {
+            // Unassign from old thesis
+            if (existingStudent.getThesisTitle() != null) {
+                Thesis oldThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(existingStudent.getThesisTitle())), Thesis.class, "theses");
+                // Add a null check for oldThesis
+                if (oldThesis != null) {
+                    oldThesis.getAssignedStudents().remove(email);
+                    if (oldThesis.getAssignedStudents().isEmpty()) {
+                        oldThesis.setStatus("Available");
+                    }
+                    mongoTemplate.save(oldThesis);
+                }
+            }
+
+            // Assign to new thesis
+            Thesis newThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(studentUpdateRequest.getThesisTitle())), Thesis.class, "theses");
+            // Add a null check for newThesis
+            if (newThesis != null) {
+                if (newThesis.getAssignedStudents().size() < newThesis.getMaxNumberOfStudents()) {
+                    newThesis.getAssignedStudents().add(email);
+                    newThesis.setStatus("Assigned");
+                    mongoTemplate.save(newThesis);
+                    update.set("thesisTitle", studentUpdateRequest.getThesisTitle());
+                } else {
+                    throw new IllegalArgumentException("The thesis is already assigned to the maximum number of students.");
+                }
+            } else {
+                throw new IllegalArgumentException("The thesis with the given title does not exist.");
+            }
         }
+
         if (studentUpdateRequest.getComments() != null) {
             update.set("comments", studentUpdateRequest.getComments());
         }
@@ -109,8 +144,6 @@ public class StudentServiceImpl implements StudentService {
             throw new IllegalArgumentException("Student not found with the provided email");
         }
     }
-
-
 
 
     @Override
