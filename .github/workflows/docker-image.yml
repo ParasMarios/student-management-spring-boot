@@ -22,6 +22,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./student-management
+          dockerfile: ./student-management/Dockerfile
           push: true
-          tags: gouvis/student-management-spring-boot:latest
+          tags: gouvis/student-management-back:latest
