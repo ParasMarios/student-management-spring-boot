@@ -2,14 +2,14 @@ version: '3'
 services:
 
   student-management-back-end:
-    image: "gouvis/student-management-back:0.0.1"
+    image: "gouvis/student-management-back:latest"
     container_name: student-management-back-end
     ports:
       - "8080:8080"
     environment:
       - SPRING.PROFILES.ACTIVE=default
   student-management-front-end:
-    image: "gouvis/student-management-front:0.0.1"
+    image: "gouvis/student-management-front:latest"
     container_name: student-management-front-end
     ports:
       - "3000:3000"
