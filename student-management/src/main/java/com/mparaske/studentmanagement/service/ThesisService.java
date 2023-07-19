@@ -11,13 +11,13 @@ public interface ThesisService {
 
     List<Thesis> getAllTheses();
 
-    Thesis getThesisByTitle(String title);
+    Thesis getThesisById(String id);
 
-    Thesis createThesis(Thesis thesis);
+    void createThesis(Thesis thesis);
 
-    boolean updateThesisByTitle(String title, ThesisUpdateRequest thesisUpdateRequest);
+    boolean updateThesisById(String id, ThesisUpdateRequest thesisUpdateRequest);
 
-    void deleteThesisByTitle(String title);
+    void deleteThesisById(String id);
 
     void deleteAllTheses();
 

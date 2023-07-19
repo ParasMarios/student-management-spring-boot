@@ -3,6 +3,7 @@ package com.mparaske.studentmanagement.service;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.result.UpdateResult;
+import com.mparaske.studentmanagement.exception.ThesisNotFoundException;
 import com.mparaske.studentmanagement.model.Thesis;
 import com.mparaske.studentmanagement.model.ThesisUpdateRequest;
 import com.mparaske.studentmanagement.repository.ThesisRepository;
@@ -14,7 +15,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Component
 public class ThesisServiceImpl implements ThesisService {
@@ -35,19 +36,19 @@ public class ThesisServiceImpl implements ThesisService {
     }
 
     @Override
-    public Thesis getThesisByTitle(String title) {
-        return thesisRepository.findByTitle(title).orElse(null);
+    public Thesis getThesisById(String id) {
+        return thesisRepository.findThesisById(id);
     }
 
     @Override
-    public Thesis createThesis(Thesis thesis) {
-        return thesisRepository.save(thesis);
+    public void createThesis(Thesis thesis) {
+        thesisRepository.save(thesis);
     }
 
     @Override
-    public boolean updateThesisByTitle(String title, ThesisUpdateRequest thesisUpdateRequest) {
+    public boolean updateThesisById(String id, ThesisUpdateRequest thesisUpdateRequest) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("title").is(title));
+        query.addCriteria(Criteria.where("id").is(id));
         Update update = new Update();
         if (thesisUpdateRequest.getTitle() != null) {
             update.set("title", thesisUpdateRequest.getTitle());
@@ -103,8 +104,13 @@ public class ThesisServiceImpl implements ThesisService {
     }
 
     @Override
-    public void deleteThesisByTitle(String title) {
-        thesisRepository.deleteByTitle(title);
+    public void deleteThesisById(String id) {
+        Optional<Thesis> thesis = thesisRepository.findById(id);
+        if (thesis.isPresent()) {
+            thesisRepository.deleteById(id);
+        } else {
+            throw new ThesisNotFoundException("Thesis not found");
+        }
     }
 
     @Override

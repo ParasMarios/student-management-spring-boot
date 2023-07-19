@@ -1,5 +1,6 @@
 package com.mparaske.studentmanagement.controller;
 
+import com.mparaske.studentmanagement.exception.ThesisNotFoundException;
 import com.mparaske.studentmanagement.model.Thesis;
 import com.mparaske.studentmanagement.model.ThesisUpdateRequest;
 import com.mparaske.studentmanagement.service.ThesisServiceImpl;
@@ -39,9 +40,14 @@ public class ThesisController {
         }
     }
 
-    @GetMapping("/theses/{title}")
-    public ResponseEntity<Thesis> getThesisByTitle(@PathVariable String title) {
-        return new ResponseEntity<>(thesisService.getThesisByTitle(title), HttpStatus.OK);
+    @GetMapping("/theses/{id}")
+    public ResponseEntity<?> getThesisById(@PathVariable String id) {
+        Thesis thesis = thesisService.getThesisById(id);
+        if (thesis != null) {
+            return new ResponseEntity<>(thesis, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Thesis not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/theses/search/{keyword}")
@@ -62,28 +68,30 @@ public class ThesisController {
         }
     }
 
-    @PatchMapping("/theses/{title}")
-    public ResponseEntity<String> updateThesisByTitle(@Valid @PathVariable("title") String title, @Valid @RequestBody ThesisUpdateRequest thesisUpdateRequest, BindingResult bindingResult) {
+    @PatchMapping("/theses/{id}")
+    public ResponseEntity<String> updateThesisById(@Valid @PathVariable("id") String id, @Valid @RequestBody ThesisUpdateRequest thesisUpdateRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
         }
         try {
-            boolean isUpdated = thesisService.updateThesisByTitle(title, thesisUpdateRequest);
+            boolean isUpdated = thesisService.updateThesisById(id, thesisUpdateRequest);
             if (isUpdated) {
-                return new ResponseEntity<>("Thesis has been updated successfully for thesis with title: " + title, HttpStatus.OK);
+                return new ResponseEntity<>("Thesis has been updated successfully for thesis with title: " + id, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Thesis not found with title: " + title, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Thesis not found with title: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while updating the thesis: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/theses/{title}")
-    public ResponseEntity<String> deleteThesisByTitle(@PathVariable String title) {
+    @DeleteMapping("/theses/{id}")
+    public ResponseEntity<String> deleteThesisById(@PathVariable String id) {
         try {
-            thesisService.deleteThesisByTitle(title);
-            return new ResponseEntity<>("Thesis has been deleted successfully for thesis with title: " + title, HttpStatus.OK);
+            thesisService.deleteThesisById(id);
+            return new ResponseEntity<>("Thesis deleted successfully", HttpStatus.OK);
+        } catch (ThesisNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while deleting the thesis: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
