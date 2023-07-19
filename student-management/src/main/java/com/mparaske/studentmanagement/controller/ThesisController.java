@@ -76,9 +76,9 @@ public class ThesisController {
         try {
             boolean isUpdated = thesisService.updateThesisById(id, thesisUpdateRequest);
             if (isUpdated) {
-                return new ResponseEntity<>("Thesis has been updated successfully for thesis with title: " + id, HttpStatus.OK);
+                return new ResponseEntity<>("Thesis has been updated successfully with id: " + id, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Thesis not found with title: " + id, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Thesis not found with id: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while updating the thesis: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
