@@ -46,12 +46,12 @@ public class StudentServiceImpl implements StudentService {
         if (isValidEmail(student.getEmail())) {
             Thesis existingThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(student.getThesisTitle())), Thesis.class, "theses");
             if (existingThesis != null) {
-                if (existingThesis.getAssignedStudents().size() < existingThesis.getMaxNumberOfStudents()) {
+                if (existingThesis.getStatus().equals("available") || (existingThesis.getStatus().equals("assigned") && existingThesis.getAssignedStudents().size() < existingThesis.getMaxNumberOfStudents())) {
                     existingThesis.getAssignedStudents().add(student.getEmail());
-                    existingThesis.setStatus("Assigned");
+                    existingThesis.setStatus("assigned");
                     mongoTemplate.save(existingThesis);
                 } else {
-                    throw new IllegalArgumentException("The thesis is already assigned to the maximum number of students.");
+                    throw new IllegalArgumentException("The thesis is not available for assignment.");
                 }
             } else {
                 throw new IllegalArgumentException("The thesis with the given title does not exist.");

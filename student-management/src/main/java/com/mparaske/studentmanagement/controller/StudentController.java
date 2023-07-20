@@ -53,11 +53,15 @@ public class StudentController {
     @PostMapping("/students")
     public ResponseEntity<String> createStudent(@Valid @RequestBody Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining(" | ")), HttpStatus.BAD_REQUEST);
         }
         try {
             studentService.createStudent(student);
             return new ResponseEntity<>("Student has been created successfully", HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while creating the student: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
