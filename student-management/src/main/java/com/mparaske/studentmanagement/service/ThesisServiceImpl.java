@@ -42,6 +42,7 @@ public class ThesisServiceImpl implements ThesisService {
 
     @Override
     public void createThesis(Thesis thesis) {
+        thesis.setStatus("available");
         thesisRepository.save(thesis);
     }
 

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -48,4 +47,15 @@ public class Thesis {
     private List<String> assignedStudents = new ArrayList<>();
 
     private List<Milestone> milestones = new ArrayList<>();
+
+    public void setStatus(String status) {
+        this.status = capitalizeFirstLetter(status);
+    }
+
+    private String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
 }
