@@ -14,7 +14,7 @@ public interface StudentService {
 
     Optional<Student> getStudentByEmail(String email);
 
-    Student createStudent(Student student);
+    void createStudent(Student student);
 
     boolean updateStudent(String email, StudentUpdateRequest studentUpdateRequest);
 

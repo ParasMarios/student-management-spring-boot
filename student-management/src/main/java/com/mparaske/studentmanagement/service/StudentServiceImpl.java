@@ -42,7 +42,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student createStudent(Student student) {
+    public void createStudent(Student student) {
         if (isValidEmail(student.getEmail())) {
             Thesis existingThesis = mongoTemplate.findOne(Query.query(Criteria.where("title").is(student.getThesisTitle())), Thesis.class, "theses");
             if (existingThesis != null) {
@@ -56,7 +56,7 @@ public class StudentServiceImpl implements StudentService {
             } else {
                 throw new IllegalArgumentException("The thesis with the given title does not exist.");
             }
-            return studentRepository.save(student);
+            studentRepository.save(student);
         } else {
             throw new IllegalArgumentException("Invalid email");
         }

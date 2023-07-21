@@ -54,32 +54,26 @@ public class ThesisServiceImpl implements ThesisService {
         if (thesisUpdateRequest.getTitle() != null) {
             update.set("title", thesisUpdateRequest.getTitle());
         }
-
         if (thesisUpdateRequest.getDescription() != null) {
             update.set("description", thesisUpdateRequest.getDescription());
         }
-
         if (thesisUpdateRequest.getMaxNumberOfStudents() != null) {
             update.set("maxNumberOfStudents", thesisUpdateRequest.getMaxNumberOfStudents());
         }
-
         if (thesisUpdateRequest.getNecessaryKnowledge() != null) {
             update.set("necessaryKnowledge", thesisUpdateRequest.getNecessaryKnowledge());
         }
-
         if (thesisUpdateRequest.getDeliverables() != null) {
             update.set("deliverables", thesisUpdateRequest.getDeliverables());
         }
-
         if (thesisUpdateRequest.getBibliographicReferences() != null) {
             update.set("bibliographicReferences", thesisUpdateRequest.getBibliographicReferences());
         }
-
         if (thesisUpdateRequest.getStatus() != null) {
             update.set("status", thesisUpdateRequest.getStatus());
         }
         if (thesisUpdateRequest.getMilestones() != null) {
-            List<DBObject> dbMilestones = thesisUpdateRequest.getMilestones().stream()
+            List<DBObject> dbMilestones = new java.util.ArrayList<>(thesisUpdateRequest.getMilestones().stream()
                     .map(milestone -> {
                         DBObject dbObject = new BasicDBObject();
                         dbObject.put("name", milestone.getName());
@@ -88,14 +82,17 @@ public class ThesisServiceImpl implements ThesisService {
                         dbObject.put("completionPercentage", milestone.getCompletionPercentage());
                         return dbObject;
                     })
-                    .toList();
+                    .toList());
 
-            for (DBObject dbMilestone : dbMilestones) {
-                update.push("milestones", dbMilestone);
+            if (thesisUpdateRequest.getDeletedMilestoneIndex() != null) {
+                int deletedIndex = thesisUpdateRequest.getDeletedMilestoneIndex();
+                if (deletedIndex >= 0 && deletedIndex < dbMilestones.size()) {
+                    dbMilestones.remove(deletedIndex);
+                }
             }
+
+            update.set("milestones", dbMilestones);
         }
-
-
         if (update.getUpdateObject().keySet().size() > 0) {
             UpdateResult result = mongoTemplate.updateFirst(query, update, Thesis.class);
             return result.getModifiedCount() > 0;

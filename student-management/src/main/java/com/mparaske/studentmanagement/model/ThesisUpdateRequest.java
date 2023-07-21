@@ -34,4 +34,6 @@ public class ThesisUpdateRequest {
     private String status;
 
     private List<Milestone> milestones = new ArrayList<>();
+
+    private Integer deletedMilestoneIndex;
 }
