@@ -1,6 +1,7 @@
 package com.mparaske.studentmanagement.service;
 
 import com.mongodb.client.result.UpdateResult;
+import com.mparaske.studentmanagement.model.Comment;
 import com.mparaske.studentmanagement.model.Student;
 import com.mparaske.studentmanagement.model.StudentUpdateRequest;
 import com.mparaske.studentmanagement.model.Thesis;
@@ -50,13 +51,15 @@ public class StudentServiceImpl implements StudentService {
                     existingThesis.getAssignedStudents().add(student.getEmail());
                     existingThesis.setStatus("Assigned");
                     mongoTemplate.save(existingThesis);
+                    List<Comment> comments = student.getComments();
+                    student.setComments(comments);
+                    studentRepository.save(student);
                 } else {
                     throw new IllegalArgumentException("The thesis is not available for assignment.");
                 }
             } else {
                 throw new IllegalArgumentException("The thesis with the given title does not exist.");
             }
-            studentRepository.save(student);
         } else {
             throw new IllegalArgumentException("Invalid email");
         }

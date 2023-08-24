@@ -8,6 +8,9 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Document(collection = "students")
 public class Student {
@@ -33,5 +36,5 @@ public class Student {
     private String thesisTitle;
 
     @Size(max = 500, message = "Comments should not exceed 500 characters")
-    private String comments;
+    private List<Comment> comments = new ArrayList<>();
 }
