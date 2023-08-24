@@ -110,7 +110,8 @@ public class StudentServiceImpl implements StudentService {
         }
 
         if (studentUpdateRequest.getComments() != null) {
-            update.set("comments", studentUpdateRequest.getComments());
+            List<Comment> updatedComments = studentUpdateRequest.getComments();
+            update.set("comments", updatedComments);
         }
 
         if (update.getUpdateObject().keySet().size() > 0) {
