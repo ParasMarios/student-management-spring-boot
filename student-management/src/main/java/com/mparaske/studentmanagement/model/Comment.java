@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class Comment {
     private String title;
     private String description;
-    private String date;
 }
