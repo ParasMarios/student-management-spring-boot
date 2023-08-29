@@ -114,7 +114,7 @@ public class StudentServiceImpl implements StudentService {
             update.set("comments", updatedComments);
         }
 
-        if (update.getUpdateObject().keySet().size() > 0) {
+        if (!update.getUpdateObject().keySet().isEmpty()) {
             UpdateResult result = mongoTemplate.updateFirst(query, update, Student.class);
             return result.getModifiedCount() > 0;
         }
