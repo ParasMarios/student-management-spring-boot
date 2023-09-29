@@ -8,6 +8,9 @@ services:
       - "8080:8080"
     environment:
       - SPRING.PROFILES.ACTIVE=default
+    volumes:
+      - src/main/resources/application.properties:/app/application.properties
+    command: [ "java", "-jar", "student-management-0.0.1-SNAPSHOT.jar", "-Dspring.config.location=/app/application.properties" ]
   student-management-front-end:
     image: "gouvis/student-management-front:latest"
     container_name: student-management-front-end
