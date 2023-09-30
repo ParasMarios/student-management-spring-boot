@@ -30,7 +30,6 @@ public class Student {
 
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Email should be valid")
-    @Pattern(regexp = ".+@uop\\.gr$", message = "Email must end with @uop.gr")
     private String email;
 
     @NotBlank(message = "Thesis title cannot be blank")

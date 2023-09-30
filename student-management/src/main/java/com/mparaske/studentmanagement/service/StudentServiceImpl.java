@@ -7,6 +7,7 @@ import com.mparaske.studentmanagement.model.StudentUpdateRequest;
 import com.mparaske.studentmanagement.model.Thesis;
 import com.mparaske.studentmanagement.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -26,6 +27,9 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     private final MongoTemplate mongoTemplate;
+
+    @Value("${allowed.email.patterns}")
+    private String[] allowedEmailPatterns;
 
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository, MongoTemplate mongoTemplate) {
@@ -162,13 +166,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean isValidEmail(String email) {
-        try {
-            InternetAddress emailAddress = new InternetAddress(email);
-            emailAddress.validate();
-            return email.endsWith("@uop.gr");
-        } catch (AddressException ex) {
-            return false;
+        for (String pattern : allowedEmailPatterns) {
+            if (email.endsWith(pattern)) {
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
