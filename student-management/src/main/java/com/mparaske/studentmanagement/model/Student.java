@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -37,4 +39,7 @@ public class Student {
 
     @Size(max = 500, message = "Comments should not exceed 500 characters")
     private List<Comment> comments = new ArrayList<>();
+
+    @LastModifiedDate
+    private Date lastModifiedDate;
 }

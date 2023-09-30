@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,7 @@ public class StudentServiceImpl implements StudentService {
         }
 
         Update update = new Update();
+        Date currentDate = new Date(); // Get the current date
 
         if (studentUpdateRequest.getThesisTitle() != null && !studentUpdateRequest.getThesisTitle().equals(existingStudent.getThesisTitle())) {
             // Unassign from old thesis
@@ -113,6 +115,9 @@ public class StudentServiceImpl implements StudentService {
             List<Comment> updatedComments = studentUpdateRequest.getComments();
             update.set("comments", updatedComments);
         }
+
+        // Update the last modified date
+        update.set("lastModifiedDate", currentDate);
 
         if (!update.getUpdateObject().keySet().isEmpty()) {
             UpdateResult result = mongoTemplate.updateFirst(query, update, Student.class);
