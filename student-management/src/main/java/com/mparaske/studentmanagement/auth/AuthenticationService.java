@@ -11,13 +11,13 @@ import com.mparaske.studentmanagement.token.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import org.springframework.http.HttpHeaders;
 
 @Service
 @RequiredArgsConstructor
@@ -106,7 +106,7 @@ public class AuthenticationService {
                             .accessToken(accessToken)
                             .refreshToken(refreshToken)
                             .build();
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                    new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                 }
             }
         }
